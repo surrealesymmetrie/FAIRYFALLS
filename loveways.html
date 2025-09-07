@@ -60,6 +60,14 @@
       margin-bottom: 20px;
     }
 
+    .vibe-block {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      font-size: 1.1em;
+      color: #ccc;
+      line-height: 1.6;
+    }
+
     audio {
       width: 100%;
       max-width: 600px;
@@ -99,6 +107,29 @@
   <h2>auf Schnurrwegen in Fairy Falls</h2>
 
   <img src="loveways.png" alt="LOVEWAYS Cover">
+
+  <div class="vibe-block">
+    <p><strong>Vibe:</strong> flauschig, inklusive Schnurren, aber ganz ohne Spice – dafür mit doppelter Überraschungs-Garantie</p>
+    <p><strong>Besonders spannend…</strong><br>
+    …als Einstieg in die Fairy Falls Anthologie<br>
+    …nach chronologischer Reihenfolge</p>
+    <p><em>Wege, die nur die Liebe finden kann …</em></p>
+    <p>
+      Elijah Winter ist Teil einer der sieben Gründerfamilien der Stadt Fairy Falls – will aber sein geliebtes Jungle Bistro leiten und nicht das Erbe des Erstgeborenen antreten, das ihm seine Eltern aufzwingen wollen.  
+      Um seine Schwester Emily dabei zu unterstützen, diesen Platz für ihn einzunehmen, kommt Elijah den märchenhaften Geheimnissen der Stadt näher als ihm lieb ist.  
+      Es steht viel mehr auf dem Spiel als die Geschwister ahnen.
+    </p>
+    <p>
+      Ruby Rivers ist ursprünglich für ein Stipendium an der Oliviera School of Design nach Fairy Falls gekommen.  
+      Im sogenannten “Anschlussjahr” betreibt sie ihre eigene kleine Boutique in der Casa und sucht verzweifelt nach einer freien Ladenfläche, aber das scheint aussichtslos.  
+      Muss Ruby ihre Träume aufgeben, um in dieser inspirierenden Stadt bleiben zu können?  
+      Oder wird sie die neue Heimat ihres Herzens verlassen müssen, um ihren Traum zu leben?
+    </p>
+    <p>
+      Du fragst dich, was die beiden verbindet?<br>
+      Nunja, zunächst einmal etwas Schnurrendes…
+    </p>
+  </div>
 
   <audio id="audio" controls controlsList="nodownload"></audio>
   <div id="nowPlaying"></div>
@@ -164,13 +195,11 @@
       audio.play();
     }
 
-    // Fortschritt speichern
     audio.addEventListener('timeupdate', () => {
       localStorage.setItem('loveways-track', current);
       localStorage.setItem('loveways-time', audio.currentTime);
     });
 
-    // Wiederherstellen
     window.addEventListener('load', () => {
       renderPlaylist();
       const savedTrack = localStorage.getItem('loveways-track');
@@ -180,13 +209,4 @@
         current = parseInt(savedTrack);
         audio.src = tracks[current][1];
         document.getElementById('nowPlaying').textContent = "▶ " + tracks[current][0];
-        if (savedTime) {
-          audio.currentTime = parseFloat(savedTime);
-        }
-      }
-    });
-  </script>
-
-</body>
-
-</html>
+        if (
