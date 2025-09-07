@@ -195,11 +195,13 @@
       audio.play();
     }
 
+    // Fortschritt speichern
     audio.addEventListener('timeupdate', () => {
       localStorage.setItem('loveways-track', current);
       localStorage.setItem('loveways-time', audio.currentTime);
     });
 
+    // Wiederherstellen
     window.addEventListener('load', () => {
       renderPlaylist();
       const savedTrack = localStorage.getItem('loveways-track');
@@ -209,7 +211,8 @@
         current = parseInt(savedTrack);
         audio.src = tracks[current][1];
         document.getElementById('nowPlaying').textContent = "▶ " + tracks[current][0];
-        if (          audio.currentTime = parseFloat(savedTime);
+        if (savedTime) {
+          audio.currentTime = parseFloat(savedTime);
         }
       }
     });
@@ -217,4 +220,3 @@
 
 </body>
 </html>
-
