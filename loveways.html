@@ -200,7 +200,12 @@
       localStorage.setItem('loveways-track', current);
       localStorage.setItem('loveways-time', audio.currentTime);
     });
-
+// Nächsten Track automatisch starten
+audio.addEventListener('ended', () => {
+  if (current < tracks.length - 1) {
+    playTrack(current + 1);
+  }
+});
     // Wiederherstellen
     window.addEventListener('load', () => {
       renderPlaylist();
@@ -220,3 +225,4 @@
 
 </body>
 </html>
+
