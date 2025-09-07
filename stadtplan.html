@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stadtplan – Fairy Falls</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Almendra+Display&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #1a1a1a;
+      color: #eee;
+      font-family: 'Almendra Display', serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.2em;
+      margin-bottom: 0.5em;
+      text-transform: uppercase;
+    }
+
+    p {
+      max-width: 700px;
+      margin: 0 auto 1.5em;
+      line-height: 1.6;
+      font-size: 1.1em;
+      color: #ccc;
+    }
+
+    .map-container {
+      margin: 40px auto;
+      max-width: 800px;
+    }
+
+    .map-container img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(128, 0, 128, 0.5);
+    }
+
+    .download-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: rgba(128, 0, 128, 0.6);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background: rgba(128, 0, 128, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Stadtplan von Fairy Falls</h1>
+
+  <p>
+    Mit jeder Geschichte wächst Fairy Falls – und auch der Stadtplan.  
+    Damit du dich während deines Aufenthalt bestmöglich orientieren kannst, findest du hier die aktuelle Version.  
+    Du kannst sie dir anschauen oder herunterladen.
+  </p>
+
+  <div class="map-container">
+    <img src="stadtplan.jpg" alt="Stadtplan Fairy Falls">
+    <br>
+    <a href="stadtplan.jpg" download class="download-btn">Download</a>
+  </div>
+
+</body>
+</html>
