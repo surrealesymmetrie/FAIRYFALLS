@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOVEWAYS – Fairy Falls</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Almendra+Display&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #1a1a1a;
+      color: #eee;
+      font-family: 'Almendra Display', serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0 20px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: #666;
+    }
+
+    .divider span {
+      margin: 0 10px;
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 0.9em;
+      color: #999;
+    }
+
+    h2 {
+      font-size: 1.4em;
+      margin-bottom: 30px;
+    }
+
+    img {
+      max-width: 300px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+      margin-bottom: 20px;
+    }
+
+    audio {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    #nowPlaying {
+      margin: 10px 0;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .track {
+      margin-bottom: 8px;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .track:hover {
+      text-decoration: underline;
+    }
+
+    #playlist {
+      display: inline-block;
+      text-align: left;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>LOVEWAYS</h1>
+  <div class="divider"><span>I</span></div>
+  <h2>auf Schnurrwegen in Fairy Falls</h2>
+
+  <img src="loveways.png" alt="LOVEWAYS Cover">
+
+  <audio id="audio" controls controlsList="nodownload"></audio>
+  <div id="nowPlaying"></div>
+  <div id="playlist"></div>
+
+  <script>
+    const tracks = [
+      ["Inro", "k00.mp3"],
+      ["ELIJAH…Dickköpfigkeit liegt uns wohl in den Genen", "k01.mp3"],
+      ["RUBY…zu diesem Schnurren", "k02.mp3"],
+      ["ELIJAH…geht mich überhaupt nicht an", "k03.mp3"],
+      ["RUBY…was ich heute verpasst hab", "k04.mp3"],
+      ["ELIJAH…egal was passiert", "k05.mp3"],
+      ["RUBY…Purrs", "k06.mp3"],
+      ["ELIJAH…ich werde nie soweit sein", "k07.mp3"],
+      ["RUBY…Katzenbotschaft für Unbekannt", "k08.mp3"],
+      ["ELIJAH…gleichfalls", "k09.mp3"],
+      ["RUBY…bis ich Zuhause bin", "k10.mp3"],
+      ["ELIJAH…Paprika und Radieschen?", "k11.mp3"],
+      ["RUBY…ein kleines bisschen mehr Platz", "k12.mp3"],
+      ["ELIJAH…ja, Kyle, ich weiß", "k13.mp3"],
+      ["RUBY…", "k14a.mp3"],
+      ["…Familiensinn", "k14b.mp3"],	
+      ["ELIJAH…vor vollendete Tatsachen gestellt", "k15.mp3"],
+      ["RUBY…immerhin", "k16.mp3"],
+      ["ELIJAH…wenn wir diesen Abend hinter uns gebracht haben", "k17.mp3"],
+      ["RUBY…am alten Baum", "k18.mp3"],
+      ["ELIJAH…diesseits der Bäume?", "k19.mp3"],
+      ["RUBY…mein zukünftiger Laden", "k20.mp3"],
+      ["ELIJAH…", "k21.mp3"],
+      ["…", "k22.mp3"],
+      ["…", "k23.mp3"],
+      ["…als würden wir uns darin sonnen", "k24.mp3"],
+      ["ELIJAH…Vater", "k25.mp3"],
+      ["RUBY…Geist", "k26.mp3"],
+      ["EMILY…das werd ich so nicht hinnehmen", "k27.mp3"],
+      ["RUBY…raushalten", "k28.mp3"],
+      ["EMILY…wieso sehen sie das nicht?", "k29.mp3"],
+      ["RUBY…bitte denk drüber nach", "k30.mp3"],
+      ["ELIJAH…Wildbeeren & Basilikum", "k31.mp3"]
+    ];
+
+    const audio = document.getElementById('audio');
+    const playlist = document.getElementById('playlist');
+    let current = 0;
+
+    function renderPlaylist() {
+      playlist.innerHTML = '';
+      tracks.forEach((track, index) => {
+        const div = document.createElement('div');
+        div.textContent = track[0];
+        div.className = 'track';
+        div.onclick = () => playTrack(index);
+        playlist.appendChild(div);
+      });
+    }
+
+    function playTrack(index) {
+      current = index;
+      audio.src = tracks[index][1];
+      document.getElementById('nowPlaying').textContent = "▶ " + tracks[index][0];
+      audio.play();
+    }
+
+    // Fortschritt speichern
+    audio.addEventListener('timeupdate', () => {
+      localStorage.setItem('loveways-track', current);
+      localStorage.setItem('loveways-time', audio.currentTime);
+    });
+
+    // Wiederherstellen
+    window.addEventListener('load', () => {
+      renderPlaylist();
+      const savedTrack = localStorage.getItem('loveways-track');
+      const savedTime = localStorage.getItem('loveways-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+        audio.src = tracks[current][1];
+        document.getElementById('nowPlaying').textContent = "▶ " + tracks[current][0];
+        if (savedTime) {
+          audio.currentTime = parseFloat(savedTime);
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
