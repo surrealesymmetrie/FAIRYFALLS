@@ -49,7 +49,7 @@
       top: 0;
       left: 0;
       transform-origin: top left;
-      transform: scale(1);
+      transform: scale(0.5);
       cursor: grab;
       user-select: none;
       -webkit-user-drag: none;
@@ -91,9 +91,9 @@
     const mapImage = document.getElementById('mapImage');
     const wrapper = document.getElementById('mapWrapper');
 
-    let scale = 1;
-    let offsetX = 0;
-    let offsetY = 0;
+    let scale = 0.5;
+    let offsetX = 100;
+    let offsetY = 100;
     let isDragging = false;
     let startX, startY;
 
@@ -105,7 +105,7 @@
     wrapper.addEventListener('wheel', e => {
       e.preventDefault();
       const delta = e.deltaY > 0 ? -0.1 : 0.1;
-      scale = Math.min(3, Math.max(0.5, scale + delta));
+      scale = Math.min(3, Math.max(0.3, scale + delta));
       updateTransform();
     });
 
@@ -152,7 +152,7 @@
       if (e.touches.length === 2) {
         const newDist = getTouchDistance(e.touches);
         const deltaScale = newDist / pinchStartDist;
-        scale = Math.min(3, Math.max(0.5, pinchStartScale * deltaScale));
+        scale = Math.min(3, Math.max(0.3, pinchStartScale * deltaScale));
       } else if (e.touches.length === 1) {
         offsetX += e.touches[0].clientX - lastTouchX;
         offsetY += e.touches[0].clientY - lastTouchY;
@@ -167,6 +167,11 @@
       const dy = touches[0].clientY - touches[1].clientY;
       return Math.sqrt(dx * dx + dy * dy);
     }
+
+    // Initiale Position setzen
+    window.addEventListener('load', () => {
+      updateTransform();
+    });
   </script>
 
 </body>
