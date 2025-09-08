@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SILVESTMAS – Fairy Falls</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Almendra+Display&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #1a1a1a;
+      color: #eee;
+      font-family: 'Almendra Display', serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0 20px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: #666;
+    }
+
+    .divider span {
+      margin: 0 10px;
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 0.9em;
+      color: #999;
+    }
+
+    h2 {
+      font-size: 1.4em;
+      margin-bottom: 30px;
+    }
+
+    img {
+      max-width: 300px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+      margin-bottom: 20px;
+    }
+
+    .notice {
+      color: #ffb4c4;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+    }
+
+    .play-btn {
+      font-family: 'Cinzel Decorative', cursive;
+      background-color: rgba(128, 0, 128, 0.7);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1.05em;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.4);
+      margin-bottom: 30px;
+      transition: background 0.3s ease;
+    }
+
+    .play-btn:hover {
+      background-color: rgba(128, 0, 128, 0.85);
+    }
+
+    .info-block {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #ccc;
+      text-align: center;
+    }
+
+    audio {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    #nowPlaying {
+      margin: 10px 0;
+      font-weight: bold;
+      font-size: 1.05em;
+    }
+
+    #playlist {
+      display: inline-block;
+      text-align: left;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .track {
+      margin-bottom: 8px;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .track:hover {
+      text-decoration: underline;
+    }
+
+    .track.active {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>SILVESTMAS</h1>
+  <div class="divider"><span>I</span></div>
+  <h2>Spicy Fairy Falls</h2>
+
+  <img src="silvestmas.png" alt="SILVESTMAS Cover" />
+
+  <div class="notice">[nicht für minderjährige Ohren geeignet!]</div>
+
+  <button class="play-btn" onclick="startPlayback()">▶ Wiedergabe starten</button>
+
+  <div class="info-block">
+    <p><strong>Vibe:</strong> unterhaltsamer Spice zwischen den Jahren</p>
+    <p><strong>Besonders spannend…</strong><br>
+      …als Adventskalender-Erweiterung zwischen Weihnachten und Silvester<br>
+      …vor LOVEWAYS
+    </p>
+    <p><strong>Spicy Silvestmas in Fairy Falls!</strong></p>
+    <p>
+      Du kennst sie sicher, diese Zeit zwischen den Jahren – nicht mehr Weihnachten, aber auch noch nicht Silvester.  
+      Das alte Jahr ist eng geworden und passt nicht mehr so richtig – wir wollen das Neue anprobieren, hängen aber noch eine Weile dazwischen fest. Sind dabei vielleicht sogar … nackt?
+    </p>
+    <p>
+      Cyn verbringt diese fünf herrlich unverbindlichen Tage zumindest nackter und vor allem heißer als erwartet. Denn eine abgelehnte Einladung zum ersten Tag des jährlichen Glühdown im Old Eye – dem ältesten Pub der Stadt Fairy Falls – hat ein wahres Feuerwerk der Leidenschaft am Silvesterabend zur Folge.  
+      Es fällt in der Zwischenzeit nämlich nicht nur Schnee vom Himmel, sondern auch ein betrunkener Nachbar in ihr Haus.
+    </p>
+    <p>
+      Eine humorvolle und pikant gewürzte Kurzgeschichte, ohne moralisch wertvolle Botschaft – einfach nur so, für Zwischendurch!
+    </p>
+  </div>
+
+  <audio id="audio" controls controlsList="nodownload"></audio>
+  <div id="nowPlaying"></div>
+  <div id="playlist"></div>
+
+  <script>
+    const tracks = [
+      ["Intro", "sil00.mp3"],
+      ["27. Dezember", "sil01.mp3"],
+      ["28. Dezember – 1", "sil02.mp3"],
+      ["28. Dezember – 2", "sil02b.mp3"],
+      ["29. Dezember", "sil03.mp3"],
+      ["30. Dezember", "sil04.mp3"],
+      ["31. Dezember – 1", "sil05.mp3"],
+      ["31. Dezember – 2", "sil05b.mp3"],
+      ["31. Dezember – 3", "sil05c.mp3"],
+      ["31. Dezember – 4", "sil05d.mp3"]
+    ];
+
+    const audio = document.getElementById('audio');
+    const playlist = document.getElementById('playlist');
+    const nowPlaying = document.getElementById('nowPlaying');
+    let current = 0;
+
+    function renderPlaylist() {
+      playlist.innerHTML = '';
+      tracks.forEach((track, index) => {
+        const div = document.createElement('div');
+        div.textContent = track[0];
+        div.className = 'track' + (index === current ? ' active' : '');
+        div.onclick = () => playTrack(index);
+        playlist.appendChild(div);
+      });
+    }
+
+    function updateActive() {
+      [...document.querySelectorAll('.track')].forEach((el, i) => {
+        el.classList.toggle('active', i === current);
+      });
+    }
+
+    function playTrack(index) {
+      current = index;
+      audio.src = tracks[index][1];
+      nowPlaying.textContent = "▶ " + tracks[index][0];
+      updateActive();
+      audio.play();
+    }
+
+    function startPlayback() {
+      const savedTrack = localStorage.getItem('silvestmas-track');
+      const savedTime = localStorage.getItem('silvestmas-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+        audio.src = tracks[current][1];
+        nowPlaying.textContent = "▶ " + tracks[current][0];
+        if (savedTime) audio.currentTime = parseFloat(savedTime);
+        audio.play();
+      } else {
+        playTrack(0);
+      }
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      localStorage.setItem('silvestmas-track', current);
+      localStorage.setItem('silvestmas-time', audio.currentTime);
+    });
+
+    audio.addEventListener('ended', () => {
+      if (current < tracks.length - 1) {
+        playTrack(current + 1);
+      }
+    });
+
+    window.addEventListener('load', () => {
+      const savedTrack = localStorage.getItem('silvestmas-track');
+      const savedTime = localStorage.getItem('silvestmas-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+      }
+
+      audio.src = tracks[current][1];
+      nowPlaying.textContent = "▶ " + tracks[current][0];
+      if (savedTime) audio.currentTime = parseFloat(savedTime
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+      }
+
+      audio.src = tracks[current][1];
+      nowPlaying.textContent = "▶ " + tracks[current][0];
+      if (savedTime) audio.currentTime = parseFloat(savedTime);
+
+      renderPlaylist();
+      updateActive();
+    });
+  </script>
+
+</body>
+</html>
