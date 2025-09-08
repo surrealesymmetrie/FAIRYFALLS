@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TWISTALE – Fairy Falls</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Almendra+Display&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #1a1a1a;
+      color: #eee;
+      font-family: 'Almendra Display', serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0 20px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: #666;
+    }
+
+    .divider span {
+      margin: 0 10px;
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 0.9em;
+      color: #999;
+    }
+
+    h2 {
+      font-size: 1.4em;
+      margin-bottom: 30px;
+    }
+
+    img {
+      max-width: 300px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+      margin-bottom: 20px;
+    }
+
+    .notice {
+      color: #ffb4c4;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+    }
+
+    .play-btn {
+      font-family: 'Cinzel Decorative', cursive;
+      background-color: rgba(128, 0, 128, 0.7);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1.05em;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.4);
+      margin-bottom: 30px;
+      transition: background 0.3s ease;
+    }
+
+    .play-btn:hover {
+      background-color: rgba(128, 0, 128, 0.85);
+    }
+
+    .info-block {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #ccc;
+      text-align: center;
+    }
+
+    audio {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    #nowPlaying {
+      margin: 10px 0;
+      font-weight: bold;
+      font-size: 1.05em;
+    }
+
+    #playlist {
+      display: inline-block;
+      text-align: left;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .track {
+      margin-bottom: 8px;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .track:hover {
+      text-decoration: underline;
+    }
+
+    .track.active {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>TWISTALE</h1>
+  <div class="divider"><span>I</span></div>
+  <h2>Fairy Falls – Wahnsinn & Verlangen</h2>
+
+  <img src="twistale.png" alt="TWISTALE Cover" />
+
+  <div class="notice">[nicht für minderjährige Ohren geeignet!]</div>
+
+  <button class="play-btn" onclick="startPlayback()">▶ Wiedergabe starten</button>
+
+  <div class="info-block">
+    <p><strong>Vibe:</strong> düsteres Märchen mit Spice und einer Menge Wahnsinn</p>
+    <p><strong>Besonders spannend…</strong><br>
+      vor PERSPEXION<br>
+      nach OB[RED]SION
+    </p>
+    <p>
+      Nachdem das Chaos besiegt worden war, trieb es nur noch vereinzelt sein Unwesen in unserer Welt. Und wo immer es sich zeigte, sorgte es für Wahnsinn und Zerstörung…
+    </p>
+    <p>
+      Aurélie Dampierre ist auf ein kleines geheimes Buch voller fesselnder Sünden gestoßen und entdeckt ihre eigene Lust. Kurz darauf empfängt und beherbergt ihre Familie einen echten Prinzen, der schnell Gefallen an Aurélie findet.  
+      Sobald sie sich auf ihre eigene sündige Geschichte eingelassen hat, beginnt sie sonderbare Dinge in Fairy Falls zu bemerken – aber nur ihr scheinen sie aufzufallen. Während sie immer tiefer in ihrer Lust versinkt, werden jene Erlebnisse immer grausiger. So keimt in Aurélie der Gedanke auf, sie könnte für ihre Affäre mit Wahnsinn bestraft werden. Sie glaubt so fest an ihr Schuldgefühl, dass sie beschließt, dem Prinzen zu widerstehen, um ihren Geist zu retten – aber ist es vielleicht schon zu spät?
+    </p>
+  </div>
+
+  <audio id="audio" controls controlsList="nodownload"></audio>
+  <div id="nowPlaying"></div>
+  <div id="playlist"></div>
+
+  <script>
+    const tracks = [
+      ["Intro", "tw00.mp3"],
+      ["…ich kann nicht aufhören", "tw01.mp3"],
+      ["…Parzeval Bourbon", "tw02.mp3"],
+      ["…eine Sünde mehr auf meinem Konto", "tw03.mp3"],
+      ["…ich verliere die Kontrolle", "tw04.mp3"],
+      ["…dieser wohlige Schmerz", "tw05.mp3"],
+      ["…verrückt", "tw06.mp3"],
+      ["…um das zu schaffen", "tw07.mp3"],
+      ["…das würde nichts bringen", "tw08.mp3"],
+      ["…umhüllt von ihren Lustvollen Lauten", "tw09.mp3"],
+      ["…ich selbst sein", "tw10.mp3"],
+      ["…hier in Fairy Falls", "tw11.mp3"]
+    ];
+
+    const audio = document.getElementById('audio');
+    const playlist = document.getElementById('playlist');
+    const nowPlaying = document.getElementById('nowPlaying');
+    let current = 0;
+
+    function renderPlaylist() {
+      playlist.innerHTML = '';
+      tracks.forEach((track, index) => {
+        const div = document.createElement('div');
+        div.textContent = track[0];
+        div.className = 'track' + (index === current ? ' active' : '');
+        div.onclick = () => playTrack(index);
+        playlist.appendChild(div);
+      });
+    }
+
+    function updateActive() {
+      [...document.querySelectorAll('.track')].forEach((el, i) => {
+        el.classList.toggle('active', i === current);
+      });
+    }
+
+    function playTrack(index) {
+      current = index;
+      audio.src = tracks[index][1];
+      nowPlaying.textContent = "▶ " + tracks[index][0];
+      updateActive();
+      audio.play();
+    }
+
+    function startPlayback() {
+      const savedTrack = localStorage.getItem('twistale-track');
+      const savedTime = localStorage.getItem('twistale-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+        audio.src = tracks[current][1];
+        nowPlaying.textContent = "▶ " + tracks[current][0];
+        if (savedTime) audio.currentTime = parseFloat(savedTime);
+        audio.play();
+      } else {
+        playTrack(0);
+      }
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      localStorage.setItem('twistale-track', current);
+      localStorage.setItem('twistale-time', audio.currentTime);
+    });
+
+    audio.addEventListener('ended', () => {
+      if (current < tracks.length - 1) {
+        playTrack(current + 1);
+      }
+    });
+
+    window.addEventListener('load', () => {
+      const savedTrack = localStorage.getItem('twistale-track');
+      const savedTime = localStorage.getItem('twistale-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+      }
+
+      audio.src = tracks[current][1];
+      nowPlaying.textContent = "▶ " + tracks[current][0];
+      if (savedTime) audio.currentTime = parseFloat(savedTime);
+
+      renderPlaylist();
+      updateActive();
+    });
+  </script>
+
+</body>
+</html>
+
