@@ -33,40 +33,26 @@
       color: #ccc;
     }
 
-    .map-container {
-      margin: 40px auto;
-      max-width: 800px;
+    .map-wrapper {
+      max-width: 100%;
+      height: 80vh;
+      overflow: hidden;
+      position: relative;
       touch-action: none;
-    }
-
-    .map-container img {
-      width: 100%;
+      margin: 40px auto;
       border-radius: 8px;
       box-shadow: 0 0 15px rgba(128, 0, 128, 0.5);
+    }
+
+    .map-wrapper img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: top left;
       transform: scale(1);
-      transition: transform 0.3s ease;
-    }
-
-    .zoom-controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .zoom-controls button {
-      padding: 10px 20px;
-      background: rgba(128, 0, 128, 0.6);
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-family: 'Cinzel Decorative', cursive;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .zoom-controls button:hover {
-      background: rgba(128, 0, 128, 0.8);
+      cursor: grab;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     .download-btn {
@@ -91,153 +77,99 @@
 
   <p>
     Mit jeder Geschichte wächst Fairy Falls – und auch der Stadtplan.  
-    Damit du dich während deines Aufenthalt bestmöglich orientieren kannst, findest du hier die aktuelle Version.  
+    Damit du dich während deines Aufenthalts bestmöglich orientieren kannst, findest du hier die aktuelle Version.  
     Du kannst sie dir anschauen oder herunterladen.
   </p>
 
-<div id="mapWrapper" style="
-  max-width: 100%;
-  height: 80vh;
-  overflow: hidden;
-  position: relative;
-  touch-action: none;
-  margin: 40px auto;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(128, 0, 128, 0.5);
-">
-  <img id="mapImage" src="stadtplan1.jpg" alt="Stadtplan Fairy Falls" style="
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform-origin: top left;
-    transform: scale(1);
-    cursor: grab;
-  ">
-</div>
+  <div class="map-wrapper" id="mapWrapper">
+    <img src="stadtplan1.jpg" alt="Stadtplan Fairy Falls" id="mapImage">
+  </div>
+
+  <a href="stadtplan1.jpg" download class="download-btn">Download</a>
 
   <script>
-    let scale = 1;
-    let startDistance = 0;
-
     const mapImage = document.getElementById('mapImage');
-    const mapContainer = document.getElementById('mapContainer');
+    const wrapper = document.getElementById('mapWrapper');
 
-    function zoomIn() {
-      scale = Math.min(3, scale + 0.2);
-      mapImage.style.transform = `scale(${scale})`;
-    }
+    let scale = 1;
+    let originX = 0;
+    let originY = 0;
+    let isDragging = false;
+    let startX, startY;
 
-    function zoomOut() {
-      scale = Math.max(0.5, scale - 0.2);
-      mapImage.style.transform = `scale(${scale})`;
-    }
+    // Zoom mit Mausrad
+    wrapper.addEventListener('wheel', e => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      scale = Math.min(3, Math.max(0.5, scale + delta));
+      updateTransform();
+    });
 
-    // Touch-Zoom für Mobilgeräte
-    mapContainer.addEventListener('touchstart', function (e) {
+    // Drag mit Maus
+    mapImage.addEventListener('mousedown', e => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      mapImage.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      mapImage.style.cursor = 'grab';
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      originX += (e.clientX - startX) / scale;
+      originY += (e.clientY - startY) / scale;
+      startX = e.clientX;
+      startY = e.clientY;
+      updateTransform();
+    });
+
+    // Touch-Zoom + Drag
+    let pinchStartDist = 0;
+    let pinchStartScale = 1;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+
+    wrapper.addEventListener('touchstart', e => {
       if (e.touches.length === 2) {
-        startDistance = getDistance(e.touches[0], e.touches[1]);
+        pinchStartDist = getTouchDistance(e.touches);
+        pinchStartScale = scale;
+      } else if (e.touches.length === 1) {
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
       }
     }, { passive: false });
 
-    mapContainer.addEventListener('touchmove', function (e) {
+    wrapper.addEventListener('touchmove', e => {
+      e.preventDefault();
       if (e.touches.length === 2) {
-        e.preventDefault();
-        const newDistance = getDistance(e.touches[0], e.touches[1]);
-        const delta = newDistance - startDistance;
-        if (Math.abs(delta) > 10) {
-          scale += delta > 0 ? 0.05 : -0.05;
-          scale = Math.max(0.5, Math.min(scale, 3));
-          mapImage.style.transform = `scale(${scale})`;
-          startDistance = newDistance;
-        }
+        const newDist = getTouchDistance(e.touches);
+        const deltaScale = newDist / pinchStartDist;
+        scale = Math.min(3, Math.max(0.5, pinchStartScale * deltaScale));
+      } else if (e.touches.length === 1) {
+        const dx = (e.touches[0].clientX - lastTouchX) / scale;
+        const dy = (e.touches[0].clientY - lastTouchY) / scale;
+        originX += dx;
+        originY += dy;
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
       }
+      updateTransform();
     }, { passive: false });
 
-    function getDistance(touch1, touch2) {
-      const dx = touch2.clientX - touch1.clientX;
-      const dy = touch2.clientY - touch1.clientY;
+    function getTouchDistance(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
       return Math.sqrt(dx * dx + dy * dy);
     }
+
+    function updateTransform() {
+      mapImage.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+    }
   </script>
-<script>
-  const mapImage = document.getElementById('mapImage');
-  const wrapper = document.getElementById('mapWrapper');
 
-  let scale = 1;
-  let originX = 0;
-  let originY = 0;
-  let isDragging = false;
-  let startX, startY;
-
-  // Mouse wheel zoom
-  wrapper.addEventListener('wheel', e => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.1 : 0.1;
-    scale = Math.min(3, Math.max(0.5, scale + delta));
-    mapImage.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
-  });
-
-  // Mouse drag
-  mapImage.addEventListener('mousedown', e => {
-    isDragging = true;
-    startX = e.clientX;
-    startY = e.clientY;
-    mapImage.style.cursor = 'grabbing';
-  });
-
-  window.addEventListener('mouseup', () => {
-    isDragging = false;
-    mapImage.style.cursor = 'grab';
-  });
-
-  window.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    originX += (e.clientX - startX) / scale;
-    originY += (e.clientY - startY) / scale;
-    startX = e.clientX;
-    startY = e.clientY;
-    mapImage.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
-  });
-
-  // Touch pinch zoom + drag
-  let pinchStartDist = 0;
-  let pinchStartScale = 1;
-  let lastTouchX = 0;
-  let lastTouchY = 0;
-
-  wrapper.addEventListener('touchstart', e => {
-    if (e.touches.length === 2) {
-      pinchStartDist = getTouchDistance(e.touches);
-      pinchStartScale = scale;
-    } else if (e.touches.length === 1) {
-      lastTouchX = e.touches[0].clientX;
-      lastTouchY = e.touches[0].clientY;
-    }
-  }, { passive: false });
-
-  wrapper.addEventListener('touchmove', e => {
-    e.preventDefault();
-    if (e.touches.length === 2) {
-      const newDist = getTouchDistance(e.touches);
-      const deltaScale = newDist / pinchStartDist;
-      scale = Math.min(3, Math.max(0.5, pinchStartScale * deltaScale));
-    } else if (e.touches.length === 1) {
-      const dx = (e.touches[0].clientX - lastTouchX) / scale;
-      const dy = (e.touches[0].clientY - lastTouchY) / scale;
-      originX += dx;
-      originY += dy;
-      lastTouchX = e.touches[0].clientX;
-      lastTouchY = e.touches[0].clientY;
-    }
-    mapImage.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
-  }, { passive: false });
-
-  function getTouchDistance(touches) {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-</script>
 </body>
 </html>
-
