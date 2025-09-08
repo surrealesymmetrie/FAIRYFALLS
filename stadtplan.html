@@ -36,12 +36,37 @@
     .map-container {
       margin: 40px auto;
       max-width: 800px;
+      touch-action: none;
     }
 
     .map-container img {
       width: 100%;
       border-radius: 8px;
       box-shadow: 0 0 15px rgba(128, 0, 128, 0.5);
+      transform: scale(1);
+      transition: transform 0.3s ease;
+    }
+
+    .zoom-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .zoom-controls button {
+      padding: 10px 20px;
+      background: rgba(128, 0, 128, 0.6);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .zoom-controls button:hover {
+      background: rgba(128, 0, 128, 0.8);
     }
 
     .download-btn {
@@ -70,12 +95,61 @@
     Du kannst sie dir anschauen oder herunterladen.
   </p>
 
-  <div class="map-container">
-    <img src="stadtplan1.jpg" alt="Stadtplan Fairy Falls">
+  <div class="zoom-controls">
+    <button onclick="zoomIn()">➕ Zoom In</button>
+    <button onclick="zoomOut()">➖ Zoom Out</button>
+  </div>
+
+  <div class="map-container" id="mapContainer">
+    <img src="stadtplan1.jpg" alt="Stadtplan Fairy Falls" id="mapImage">
     <br>
     <a href="stadtplan1.jpg" download class="download-btn">Download</a>
   </div>
 
-</body>
+  <script>
+    let scale = 1;
+    let startDistance = 0;
 
+    const mapImage = document.getElementById('mapImage');
+    const mapContainer = document.getElementById('mapContainer');
+
+    function zoomIn() {
+      scale = Math.min(3, scale + 0.2);
+      mapImage.style.transform = `scale(${scale})`;
+    }
+
+    function zoomOut() {
+      scale = Math.max(0.5, scale - 0.2);
+      mapImage.style.transform = `scale(${scale})`;
+    }
+
+    // Touch-Zoom für Mobilgeräte
+    mapContainer.addEventListener('touchstart', function (e) {
+      if (e.touches.length === 2) {
+        startDistance = getDistance(e.touches[0], e.touches[1]);
+      }
+    }, { passive: false });
+
+    mapContainer.addEventListener('touchmove', function (e) {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const newDistance = getDistance(e.touches[0], e.touches[1]);
+        const delta = newDistance - startDistance;
+        if (Math.abs(delta) > 10) {
+          scale += delta > 0 ? 0.05 : -0.05;
+          scale = Math.max(0.5, Math.min(scale, 3));
+          mapImage.style.transform = `scale(${scale})`;
+          startDistance = newDistance;
+        }
+      }
+    }, { passive: false });
+
+    function getDistance(touch1, touch2) {
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+  </script>
+
+</body>
 </html>
