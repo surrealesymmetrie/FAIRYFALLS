@@ -31,6 +31,7 @@
       justify-content: center;
       margin: 10px 0 20px;
     }
+
     .divider::before,
     .divider::after {
       content: "";
@@ -38,6 +39,7 @@
       height: 1px;
       background-color: #666;
     }
+
     .divider span {
       margin: 0 10px;
       font-family: 'Cinzel Decorative', cursive;
@@ -50,46 +52,42 @@
       margin-bottom: 30px;
     }
 
-<!-- Coverbild -->
-<img src="mentalove.png" alt="MENTALOVE Cover" style="
-  max-width: 300px;
-  width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
-  margin-bottom: 20px;
-">
+    img {
+      max-width: 300px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+      margin-bottom: 20px;
+    }
 
-<!-- Hinweistext -->
-<div style="
-  max-width: 700px;
-  margin: 0 auto 20px;
-  font-size: 1.1em;
-  color: #ffb4c4;
-  font-weight: bold;
-  font-family: 'Almendra Display', serif;
-">
-  [nicht für minderjährige Ohren geeignet!]
-</div>
+    .notice {
+      color: #ffb4c4;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+    }
 
-<!-- Play-Button -->
-<button onclick="startPlayback()" style="
-  font-family: 'Cinzel Decorative', cursive;
-  background-color: rgba(128, 0, 128, 0.7);
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 1.05em;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(128, 0, 128, 0.4);
-  margin-bottom: 30px;
-  transition: background 0.3s ease;
-">
-▶ Wiedergabe starten
-</button>
+    .play-btn {
+      font-family: 'Cinzel Decorative', cursive;
+      background-color: rgba(128, 0, 128, 0.7);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1.05em;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.4);
+      margin-bottom: 30px;
+      transition: background 0.3s ease;
+    }
+
+    .play-btn:hover {
+      background-color: rgba(128, 0, 128, 0.85);
+    }
+
     .info-block {
       max-width: 700px;
-      margin: 0 auto 20px;
+      margin: 0 auto 30px;
       font-size: 1.1em;
       line-height: 1.6;
       color: #ccc;
@@ -122,9 +120,11 @@
       cursor: pointer;
       color: #ccc;
     }
+
     .track:hover {
       text-decoration: underline;
     }
+
     .track.active {
       color: #fff;
       font-weight: bold;
@@ -140,10 +140,10 @@
 
   <img src="mentalove.png" alt="MENTALOVE Cover" />
 
-  <!-- Play-Button -->
+  <div class="notice">[nicht für minderjährige Ohren geeignet!]</div>
+
   <button class="play-btn" onclick="startPlayback()">▶ Wiedergabe starten</button>
 
-  <!-- Hinweis-/Vibe-/Klappentextblock unter dem Button -->
   <div class="info-block">
     <p><strong>Vibe:</strong> düster romantisch mit mehr Spice als du erwartest</p>
     <p><strong>Besonders spannend…</strong><br>
@@ -153,15 +153,12 @@
     </p>
     <p><em>Wenn die Intensität der Berührung von der Tiefe der mentalen Verbindung abhängt…</em></p>
     <p>
-      Evelia und Nathan sind beste Freunde und sterben gemeinsam bei einer betrunkenen Dummheit auf See. Nach ihrem Tod stellen sie fest, dass im Diesseits, neben der körperlichen, existiert noch eine mentale Ebene existiert. Sie sind allein dort, bis sie Gerüchten um eine verfluchte Geisterinsel folgen, die nahe des Urlaubsortes liegt, an dem die beiden geboren, aufgewachsen und gestorben sind.
-      Sie treffen Luciel, der sein Interesse an Nathan kaum verbergen kann, weshalb Evelia die beiden allein lässt und dadurch Tenebra begegnet.
-      Mit den beiden lernen sie, dass die Intensität der Berührungen auf der mentalen Ebene durchaus jene auf der körperlichen übertreffen können… Jedoch müssen Evelia und Nathan bald feststellen, dass Tenebra und Luciel heimtückische Absichten verfolgen.
+      Evelia und Nathan sind beste Freunde und sterben gemeinsam bei einer betrunkenen Dummheit auf See. Nach ihrem Tod stellen sie fest, dass im Diesseits, neben der körperlichen, existiert noch eine mentale Ebene existiert. Sie sind allein dort, bis sie Gerüchten um eine verfluchte Geisterinsel folgen, die nahe des Urlaubsortes liegt, an dem die beiden geboren, aufgewachsen und gestorben sind. Sie treffen Luciel, der sein Interesse an Nathan kaum verbergen kann, weshalb Evelia die beiden allein lässt und dadurch Tenebra begegnet. Mit den beiden lernen sie, dass die Intensität der Berührungen auf der mentalen Ebene durchaus jene auf der körperlichen übertreffen können… Jedoch müssen Evelia und Nathan bald feststellen, dass Tenebra und Luciel heimtückische Absichten verfolgen.
     </p>
     <p>Eine Geschichte, die inhaltlich während meines ersten TikTok Lives, per multiple Choice zusammengestellt wurde.</p>
     <p><em>Erste Hörermeinung: »Ich bin unsicher, ob die Bezeichnung “spicy” noch ausreicht!«</em></p>
   </div>
 
-  <!-- Player + Playlist -->
   <audio id="audio" controls controlsList="nodownload"></audio>
   <div id="nowPlaying"></div>
   <div id="playlist"></div>
@@ -206,76 +203,4 @@
       tracks.forEach((track, index) => {
         const div = document.createElement('div');
         div.textContent = track[0];
-        div.className = 'track' + (index === current ? ' active' : '');
-        div.onclick = () => playTrack(index);
-        playlist.appendChild(div);
-      });
-    }
-
-    function updateActive() {
-      [...document.querySelectorAll('.track')].forEach((el, i) => {
-        el.classList.toggle('active', i === current);
-      });
-    }
-
-    function playTrack(index) {
-      current = index;
-      audio.src = tracks[index][1];
-      nowPlaying.textContent = "▶ " + tracks[index][0];
-      updateActive();
-      audio.play();
-    }
-
-    // Start-Button: spielt gespeicherten Stand oder Track 0
-    function startPlayback() {
-      const savedTrack = localStorage.getItem('mentalove-track');
-      const savedTime = localStorage.getItem('mentalove-time');
-
-      if (savedTrack !== null) {
-        current = parseInt(savedTrack);
-        audio.src = tracks[current][1];
-        nowPlaying.textContent = "▶ " + tracks[current][0];
-        if (savedTime) audio.currentTime = parseFloat(savedTime);
-        audio.play();
-      } else {
-        playTrack(0);
-      }
-    }
-
-    // Fortschritt speichern
-    audio.addEventListener('timeupdate', () => {
-      localStorage.setItem('mentalove-track', current);
-      localStorage.setItem('mentalove-time', audio.currentTime);
-    });
-
-    // Nächsten Track automatisch starten
-    audio.addEventListener('ended', () => {
-      if (current < tracks.length - 1) {
-        playTrack(current + 1);
-      }
-    });
-
-    // Zustand beim Laden herstellen (ohne Autoplay)
-    window.addEventListener('load', () => {
-      const savedTrack = localStorage.getItem('mentalove-track');
-      const savedTime = localStorage.getItem('mentalove-time');
-
-      if (savedTrack !== null) {
-        current = parseInt(savedTrack);
-      }
-
-      audio.src = tracks[current][1];
-      nowPlaying.textContent = "▶ " + tracks[current][0];
-      if (savedTime) audio.currentTime = parseFloat(savedTime);
-
-      renderPlaylist();
-      updateActive();
-    });
-  </script>
-
-</body>
-</html>
-
-
-
-
+        div.className = 'track'
