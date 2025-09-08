@@ -204,3 +204,68 @@
         const div = document.createElement('div');
         div.textContent = track[0];
         div.className = 'track'
+        div.className = 'track' + (index === current ? ' active' : '');
+        div.onclick = () => playTrack(index);
+        playlist.appendChild(div);
+      });
+    }
+
+    function updateActive() {
+      [...document.querySelectorAll('.track')].forEach((el, i) => {
+        el.classList.toggle('active', i === current);
+      });
+    }
+
+    function playTrack(index) {
+      current = index;
+      audio.src = tracks[index][1];
+      nowPlaying.textContent = "▶ " + tracks[index][0];
+      updateActive();
+      audio.play();
+    }
+
+    function startPlayback() {
+      const savedTrack = localStorage.getItem('mentalove-track');
+      const savedTime = localStorage.getItem('mentalove-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+        audio.src = tracks[current][1];
+        nowPlaying.textContent = "▶ " + tracks[current][0];
+        if (savedTime) audio.currentTime = parseFloat(savedTime);
+        audio.play();
+      } else {
+        playTrack(0);
+      }
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      localStorage.setItem('mentalove-track', current);
+      localStorage.setItem('mentalove-time', audio.currentTime);
+    });
+
+    audio.addEventListener('ended', () => {
+      if (current < tracks.length - 1) {
+        playTrack(current + 1);
+      }
+    });
+
+    window.addEventListener('load', () => {
+      const savedTrack = localStorage.getItem('mentalove-track');
+      const savedTime = localStorage.getItem('mentalove-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+      }
+
+      audio.src = tracks[current][1];
+      nowPlaying.textContent = "▶ " + tracks[current][0];
+      if (savedTime) audio.currentTime = parseFloat(savedTime);
+
+      renderPlaylist();
+      updateActive();
+    });
+  </script>
+
+</body>
+</html>
