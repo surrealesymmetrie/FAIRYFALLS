@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MENTALOVE – Fairy Falls</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Almendra+Display&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #1a1a1a;
+      color: #eee;
+      font-family: 'Almendra Display', serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0 20px;
+    }
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: #666;
+    }
+    .divider span {
+      margin: 0 10px;
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 0.9em;
+      color: #999;
+    }
+
+    h2 {
+      font-size: 1.4em;
+      margin-bottom: 30px;
+    }
+
+    img {
+      max-width: 300px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+      margin-bottom: 16px;
+    }
+
+    .notice {
+      color: #ffb4c4;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .play-btn {
+      font-family: 'Cinzel Decorative', cursive;
+      background-color: rgba(128, 0, 128, 0.7);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1.05em;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(128, 0, 128, 0.4);
+      margin-bottom: 20px;
+    }
+    .play-btn:hover {
+      background-color: rgba(128, 0, 128, 0.85);
+    }
+
+    audio {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    #nowPlaying {
+      margin: 10px 0;
+      font-weight: bold;
+      font-size: 1.05em;
+    }
+
+    #playlist {
+      display: inline-block;
+      text-align: left;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .track {
+      margin-bottom: 8px;
+      cursor: pointer;
+      color: #ccc;
+    }
+    .track:hover {
+      text-decoration: underline;
+    }
+    .track.active {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>MENTALOVE</h1>
+  <div class="divider"><span>I</span></div>
+  <h2>im Jenseits des Diesseits</h2>
+
+  <img src="mentalove.png" alt="MENTALOVE Cover" />
+
+  <div class="notice">[nicht für minderjährige Ohren geeignet!]</div>
+
+  <!-- Play-Button direkt unter dem Hinweis -->
+  <button class="play-btn" onclick="startPlayback()">▶ Wiedergabe starten</button>
+
+  <audio id="audio" controls controlsList="nodownload"></audio>
+  <div id="nowPlaying"></div>
+  <div id="playlist"></div>
+
+  <script>
+    const tracks = [
+      ["Inro", "mk00.mp3"],
+      ["EVELIA…Prolog", "mk01.mp3"],
+      ["NATHAN…", "mk02.mp3"],
+      ["das Thema, über das wir nicht sprechen", "mk02b.mp3"],
+      ["EVELIA…es ist wunderbar", "mk03.mp3"],
+      ["NATHAN…melntaler Hautkontakt", "mk04.mp3"],
+      ["EVELIA…Sicherheitsabstand", "mk05.mp3"],
+      ["LUCIEL…es kribbelt in meinen Fingerspitzen", "mk06.mp3"],
+      ["EVELIA…aber es ist so gekommen und du kannst nichts daran ändern", "mk07.mp3"],
+      ["NATHAN…schöne Idee", "mk08.mp3"],
+      ["TENEBRA…in meinem Kopf", "mk09.mp3"],
+      ["LUCIEL…Nathan muss verschwinden", "mk10.mp3"],
+      ["EVELIA…Neugier wird zu Vorfreude", "mk11.mp3"],
+      ["TENEBRA…wenn sogar ich hadere", "mk12.mp3"],
+      ["EVELIA…bis wir alle gemeinsam erbeben", "mk13.mp3"],
+      ["LUCIEL…als hätten wir sie nie belogen", "mk14.mp3"],
+      ["NATHAN…niemand wird uns trennen", "mk15.mp3"],
+      ["TENEBRA…", "mk16.mp3"],
+      ["…Fairy Falls", "mk16b.mp3"],
+      ["EVELIA…es ist unsere einzige Chance", "mk17.mp3"],
+      ["LUCIEL…wie sehr es mich nach Rache dürstet", "mk18.mp3"],
+      ["TENEBRA…was sind wir jetzt?", "mk19.mp3"],
+      ["NATHAN…Haut an Haut", "mk20.mp3"],
+      ["LUCIEL…es könnte schöner nicht sein", "mk21.mp3"],
+      ["TENEBRA…dieser F*** wird definitiv niemals in Vergessenheit geraden", "mk22.mp3"],
+      ["EVELIA…wir werden zumindest einen Teil hiervon an unserer Seite haben", "mk23.mp3"]
+    ];
+
+    const audio = document.getElementById('audio');
+    const playlist = document.getElementById('playlist');
+    const nowPlaying = document.getElementById('nowPlaying');
+    let current = 0;
+
+    function renderPlaylist() {
+      playlist.innerHTML = '';
+      tracks.forEach((track, index) => {
+        const div = document.createElement('div');
+        div.textContent = track[0];
+        div.className = 'track' + (index === current ? ' active' : '');
+        div.onclick = () => playTrack(index);
+        playlist.appendChild(div);
+      });
+    }
+
+    function updateActive() {
+      [...document.querySelectorAll('.track')].forEach((el, i) => {
+        el.classList.toggle('active', i === current);
+      });
+    }
+
+    function playTrack(index) {
+      current = index;
+      audio.src = tracks[index][1];
+      nowPlaying.textContent = "▶ " + tracks[index][0];
+      updateActive();
+      audio.play();
+    }
+
+    // Button-Start: beginnt sinnvoll mit letztem Stand oder Track 0
+    function startPlayback() {
+      if (!audio.src) {
+        // Wenn noch nichts geladen wurde, lade aktuellen (oder gespeicherten) Track
+        const savedTrack = localStorage.getItem('mentalove-track');
+        const savedTime = localStorage.getItem('mentalove-time');
+        if (savedTrack !== null) {
+          current = parseInt(savedTrack);
+          audio.src = tracks[current][1];
+          nowPlaying.textContent = "▶ " + tracks[current][0];
+          if (savedTime) audio.currentTime = parseFloat(savedTime);
+        } else {
+          playTrack(0);
+          return;
+        }
+      }
+      audio.play();
+    }
+
+    // Fortschritt speichern
+    audio.addEventListener('timeupdate', () => {
+      localStorage.setItem('mentalove-track', current);
+      localStorage.setItem('mentalove-time', audio.currentTime);
+    });
+
+    // Automatisch nächsten Track abspielen (nahtlose Fortsetzung)
+    audio.addEventListener('ended', () => {
+      if (current < tracks.length - 1) {
+        playTrack(current + 1);
+      }
+    });
+
+    // Beim Laden wiederherstellen (ohne Autoplay)
+    window.addEventListener('load', () => {
+      const savedTrack = localStorage.getItem('mentalove-track');
+      const savedTime = localStorage.getItem('mentalove-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+      }
+
+      // Setze sichtbaren Zustand, aber starte nicht automatisch
+      audio.src = tracks[current][1];
+      nowPlaying.textContent = "▶ " + tracks[current][0];
+      if (savedTime) audio.currentTime = parseFloat(savedTime);
+
+      renderPlaylist();
+      updateActive();
+    });
+  </script>
+
+</body>
+</html>
