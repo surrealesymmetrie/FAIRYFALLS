@@ -95,16 +95,25 @@
     Du kannst sie dir anschauen oder herunterladen.
   </p>
 
-  <div class="zoom-controls">
-    <button onclick="zoomIn()">➕ Zoom In</button>
-    <button onclick="zoomOut()">➖ Zoom Out</button>
-  </div>
-
-  <div class="map-container" id="mapContainer">
-    <img src="stadtplan1.jpg" alt="Stadtplan Fairy Falls" id="mapImage">
-    <br>
-    <a href="stadtplan1.jpg" download class="download-btn">Download</a>
-  </div>
+<div id="mapWrapper" style="
+  max-width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+  margin: 40px auto;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(128, 0, 128, 0.5);
+">
+  <img id="mapImage" src="stadtplan1.jpg" alt="Stadtplan Fairy Falls" style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+    transform: scale(1);
+    cursor: grab;
+  ">
+</div>
 
   <script>
     let scale = 1;
@@ -150,6 +159,85 @@
       return Math.sqrt(dx * dx + dy * dy);
     }
   </script>
+<script>
+  const mapImage = document.getElementById('mapImage');
+  const wrapper = document.getElementById('mapWrapper');
 
+  let scale = 1;
+  let originX = 0;
+  let originY = 0;
+  let isDragging = false;
+  let startX, startY;
+
+  // Mouse wheel zoom
+  wrapper.addEventListener('wheel', e => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    scale = Math.min(3, Math.max(0.5, scale + delta));
+    mapImage.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+  });
+
+  // Mouse drag
+  mapImage.addEventListener('mousedown', e => {
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    mapImage.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    mapImage.style.cursor = 'grab';
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    originX += (e.clientX - startX) / scale;
+    originY += (e.clientY - startY) / scale;
+    startX = e.clientX;
+    startY = e.clientY;
+    mapImage.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+  });
+
+  // Touch pinch zoom + drag
+  let pinchStartDist = 0;
+  let pinchStartScale = 1;
+  let lastTouchX = 0;
+  let lastTouchY = 0;
+
+  wrapper.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      pinchStartDist = getTouchDistance(e.touches);
+      pinchStartScale = scale;
+    } else if (e.touches.length === 1) {
+      lastTouchX = e.touches[0].clientX;
+      lastTouchY = e.touches[0].clientY;
+    }
+  }, { passive: false });
+
+  wrapper.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const newDist = getTouchDistance(e.touches);
+      const deltaScale = newDist / pinchStartDist;
+      scale = Math.min(3, Math.max(0.5, pinchStartScale * deltaScale));
+    } else if (e.touches.length === 1) {
+      const dx = (e.touches[0].clientX - lastTouchX) / scale;
+      const dy = (e.touches[0].clientY - lastTouchY) / scale;
+      originX += dx;
+      originY += dy;
+      lastTouchX = e.touches[0].clientX;
+      lastTouchY = e.touches[0].clientY;
+    }
+    mapImage.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+  }, { passive: false });
+
+  function getTouchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+</script>
 </body>
 </html>
+
