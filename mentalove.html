@@ -58,12 +58,6 @@
       margin-bottom: 16px;
     }
 
-    .notice {
-      color: #ffb4c4;
-      font-weight: bold;
-      margin-bottom: 16px;
-    }
-
     .play-btn {
       font-family: 'Cinzel Decorative', cursive;
       background-color: rgba(128, 0, 128, 0.7);
@@ -78,6 +72,15 @@
     }
     .play-btn:hover {
       background-color: rgba(128, 0, 128, 0.85);
+    }
+
+    .info-block {
+      max-width: 700px;
+      margin: 0 auto 20px;
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #ccc;
+      text-align: center;
     }
 
     audio {
@@ -124,11 +127,28 @@
 
   <img src="mentalove.png" alt="MENTALOVE Cover" />
 
-  <div class="notice">[nicht für minderjährige Ohren geeignet!]</div>
-
-  <!-- Play-Button direkt unter dem Hinweis -->
+  <!-- Play-Button -->
   <button class="play-btn" onclick="startPlayback()">▶ Wiedergabe starten</button>
 
+  <!-- Hinweis-/Vibe-/Klappentextblock unter dem Button -->
+  <div class="info-block">
+    <p><strong>Vibe:</strong> düster romantisch mit mehr Spice als du erwartest</p>
+    <p><strong>Besonders spannend…</strong><br>
+      …als Einstieg in die Fairy Falls Anthologie<br>
+      …zwischendurch, um die Neugier zu Befriedigen<br>
+      …als Bonus, wenn du alles andere gehört hast
+    </p>
+    <p><em>Wenn die Intensität der Berührung von der Tiefe der mentalen Verbindung abhängt…</em></p>
+    <p>
+      Evelia und Nathan sind beste Freunde und sterben gemeinsam bei einer betrunkenen Dummheit auf See. Nach ihrem Tod stellen sie fest, dass im Diesseits, neben der körperlichen, existiert noch eine mentale Ebene existiert. Sie sind allein dort, bis sie Gerüchten um eine verfluchte Geisterinsel folgen, die nahe des Urlaubsortes liegt, an dem die beiden geboren, aufgewachsen und gestorben sind.
+      Sie treffen Luciel, der sein Interesse an Nathan kaum verbergen kann, weshalb Evelia die beiden allein lässt und dadurch Tenebra begegnet.
+      Mit den beiden lernen sie, dass die Intensität der Berührungen auf der mentalen Ebene durchaus jene auf der körperlichen übertreffen können… Jedoch müssen Evelia und Nathan bald feststellen, dass Tenebra und Luciel heimtückische Absichten verfolgen.
+    </p>
+    <p>Eine Geschichte, die inhaltlich während meines ersten TikTok Lives, per multiple Choice zusammengestellt wurde.</p>
+    <p><em>Erste Hörermeinung: »Ich bin unsicher, ob die Bezeichnung “spicy” noch ausreicht!«</em></p>
+  </div>
+
+  <!-- Player + Playlist -->
   <audio id="audio" controls controlsList="nodownload"></audio>
   <div id="nowPlaying"></div>
   <div id="playlist"></div>
@@ -193,23 +213,20 @@
       audio.play();
     }
 
-    // Button-Start: beginnt sinnvoll mit letztem Stand oder Track 0
+    // Start-Button: spielt gespeicherten Stand oder Track 0
     function startPlayback() {
-      if (!audio.src) {
-        // Wenn noch nichts geladen wurde, lade aktuellen (oder gespeicherten) Track
-        const savedTrack = localStorage.getItem('mentalove-track');
-        const savedTime = localStorage.getItem('mentalove-time');
-        if (savedTrack !== null) {
-          current = parseInt(savedTrack);
-          audio.src = tracks[current][1];
-          nowPlaying.textContent = "▶ " + tracks[current][0];
-          if (savedTime) audio.currentTime = parseFloat(savedTime);
-        } else {
-          playTrack(0);
-          return;
-        }
+      const savedTrack = localStorage.getItem('mentalove-track');
+      const savedTime = localStorage.getItem('mentalove-time');
+
+      if (savedTrack !== null) {
+        current = parseInt(savedTrack);
+        audio.src = tracks[current][1];
+        nowPlaying.textContent = "▶ " + tracks[current][0];
+        if (savedTime) audio.currentTime = parseFloat(savedTime);
+        audio.play();
+      } else {
+        playTrack(0);
       }
-      audio.play();
     }
 
     // Fortschritt speichern
@@ -218,14 +235,14 @@
       localStorage.setItem('mentalove-time', audio.currentTime);
     });
 
-    // Automatisch nächsten Track abspielen (nahtlose Fortsetzung)
+    // Nächsten Track automatisch starten
     audio.addEventListener('ended', () => {
       if (current < tracks.length - 1) {
         playTrack(current + 1);
       }
     });
 
-    // Beim Laden wiederherstellen (ohne Autoplay)
+    // Zustand beim Laden herstellen (ohne Autoplay)
     window.addEventListener('load', () => {
       const savedTrack = localStorage.getItem('mentalove-track');
       const savedTime = localStorage.getItem('mentalove-time');
@@ -234,7 +251,6 @@
         current = parseInt(savedTrack);
       }
 
-      // Setze sichtbaren Zustand, aber starte nicht automatisch
       audio.src = tracks[current][1];
       nowPlaying.textContent = "▶ " + tracks[current][0];
       if (savedTime) audio.currentTime = parseFloat(savedTime);
