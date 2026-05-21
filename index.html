@@ -270,6 +270,21 @@
       transform: translateY(-60px) scale(1.5);
     }
   }
+/* Fix für Hybrid-Buch-Grid */
+.hybrid-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+@media (max-width: 768px) {
+  .hybrid-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 </style>
 
 <!-- Klick-Logik -->
@@ -304,27 +319,26 @@
 <!-- Hybrid-Buch-Container -->
 <div class="cover-grid">
     </a>
-    <p>
+   <p>
       30% lesen - 70% hören
       Eine völlig neue Art, in Geschichten einzutauchen.
-    
-      ABER ACHTUNG: SPOILERGEFAHR!
-      hier entsteht die 7-teilige "Chaos im Blut"-Reihe.
-      Die ersten beiden Bände können noch komplett unabhängig gehört & gelesen werden,
-      enthalten durch Eastereggs und Wiederkehrende Figuren aber einige Spoiler,
-      die du vielleicht vermeiden möchtest.
-      Deshalb empfehle ich, diese Reihenfolge einzuhalten:
-      LOVEWAYS - auf Schnurrwegen (als Prequel)
-      PERSPEXION - im Spiegelscherbenglanz verschollen (Chaos im Blut 1)
-      OBREDSION - im Gefundenwerden verloren (Chaos im Blut 2)
-
-      Am Ende bleibt diese Entscheidung dir überlassen!
-      Ich kann es verstehen, wenn du nicht erst durch zwei andere Geschichten
-      wandern möchtest, bevor dich der Weg zum bisherigen Highlight
-      dieses Storyversums ankommst.
-      Vor allem, weil sie schon recht unterschiedlich sind.
-      Aber ich verspreche dir, dass es sich lohnt!
-      
+    <p>
+      ABER ACHTUNG: SPOILERGEFAHR!<br>
+      hier entsteht die 7-teilige "Chaos im Blut"-Reihe.<br>
+      Die ersten beiden Bände können noch komplett unabhängig gehört & gelesen werden,<br>
+      enthalten durch Eastereggs und Wiederkehrende Figuren aber einige Spoiler,<br>
+      die du vielleicht vermeiden möchtest.<br>
+      Deshalb empfehle ich, diese Reihenfolge einzuhalten:<br>
+      LOVEWAYS - auf Schnurrwegen (als Prequel)<br>
+      PERSPEXION - im Spiegelscherbenglanz verschollen (Chaos im Blut 1)<br>
+      OBREDSION - im Gefundenwerden verloren (Chaos im Blut 2)<br>
+    <p>
+      Am Ende bleibt diese Entscheidung dir überlassen!<br>
+      Ich kann es verstehen, wenn du nicht erst durch zwei andere Geschichten<br>
+      wandern möchtest, bevor dich der Weg zum bisherigen Highlight<br>
+      dieses Storyversums ankommst.<br>
+      Vor allem, weil sie schon recht unterschiedlich sind.<br>
+      Aber ich verspreche dir, dass es sich lohnt!<br>
     </p>
   </div>
   <!-- Hybrid 1 -->
@@ -333,10 +347,10 @@
       <img src="COVER_PERSPEXION.jpg" alt="PERSPEXION - im Spiegelscherbenglanz verschollen">
     </a>
     <p>
-      Band 1 der "Chaos im Blut"-Reihe
-      Poetisch, aber düster und mit 
-      Matrjoschka-Seelen-Konstrukt
-      Entführung mal anders
+      Band 1 der "Chaos im Blut"-Reihe<p>
+      Poetisch, aber düster und mit<p>
+      Matrjoschka-Seelen-Konstrukt<p>
+      Entführung mal anders<p>
     </p>
   </div>
 
@@ -346,11 +360,11 @@
       <img src="COVER_OBREDSION.jpg" alt="OBREDSION - im Gefundenwerden verloren">
     </a>
     <p>
-      Band 2 der "Chaos im Blut"-Reihe
-      Ein psychologischer
-      Dark Romantasy Thriller,
-      der dich an die Grenzen
-      deines Mitgefühls führt
+      Band 2 der "Chaos im Blut"-Reihe<p>
+      Ein psychologischer<p>
+      Dark Romantasy Thriller,<p>
+      der dich an die Grenzen<p>
+      deines Mitgefühls führt<p>
     </p>
   </div>
 
