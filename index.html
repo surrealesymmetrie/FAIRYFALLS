@@ -270,19 +270,14 @@
       transform: translateY(-60px) scale(1.5);
     }
   }
-/* Fix für Hybrid-Buch-Grid */
-.hybrid-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 40px;
+/* Hybrid-Cover nebeneinander erzwingen */
+.hybrid-grid .cover-card a {
+  display: block;
+  width: 100%;
 }
 
-@media (max-width: 768px) {
-  .hybrid-grid {
-    flex-direction: column;
-    align-items: center;
-  }
+.hybrid-grid .cover-card {
+  max-width: 250px;
 }
 
 </style>
@@ -347,10 +342,10 @@
       <img src="COVER_PERSPEXION.jpg" alt="PERSPEXION - im Spiegelscherbenglanz verschollen">
     </a>
     <p>
-      Band 1 der "Chaos im Blut"-Reihe<p>
-      Poetisch, aber düster und mit<p>
-      Matrjoschka-Seelen-Konstrukt<p>
-      Entführung mal anders<p>
+      Band 1 der "Chaos im Blut"-Reihe<br>
+      Poetisch, aber düster und mit<br>
+      Matrjoschka-Seelen-Konstrukt<br>
+      Entführung mal anders<br>
     </p>
   </div>
 
@@ -360,11 +355,11 @@
       <img src="COVER_OBREDSION.jpg" alt="OBREDSION - im Gefundenwerden verloren">
     </a>
     <p>
-      Band 2 der "Chaos im Blut"-Reihe<p>
-      Ein psychologischer<p>
-      Dark Romantasy Thriller,<p>
-      der dich an die Grenzen<p>
-      deines Mitgefühls führt<p>
+      Band 2 der "Chaos im Blut"-Reihe<br>
+      Ein psychologischer<br>
+      Dark Romantasy Thriller,<br>
+      der dich an die Grenzen<br>
+      deines Mitgefühls führt<br>
     </p>
   </div>
 
