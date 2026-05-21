@@ -230,6 +230,8 @@
 
 </div>
   <br>
+<br>
+
 <!-- Klingelbeutel Button -->
 <div style="margin-top: 60px;">
   <button id="donateBtn" style="
@@ -261,33 +263,56 @@
   }
 
   @keyframes floatUp {
-    0% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-60px) scale(1.5);
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-60px) scale(1.5); }
+  }
+
+  /* Hybrid-Bereich */
+  .hybrid-info {
+    max-width: 700px;
+    margin: 40px auto;
+    line-height: 1.6;
+    color: #ccc;
+    font-size: 1.1em;
+  }
+
+  .hybrid-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0 80px;
+  }
+
+  .hybrid-grid .cover-card {
+    max-width: 250px;
+    text-align: center;
+  }
+
+  .hybrid-grid .cover-card img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .hybrid-grid .cover-card img:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .hybrid-grid {
+      flex-direction: column;
+      align-items: center;
     }
   }
-/* Hybrid-Cover nebeneinander erzwingen */
-.hybrid-grid .cover-card a {
-  display: block;
-  width: 100%;
-}
-
-.hybrid-grid .cover-card {
-  max-width: 250px;
-}
-
 </style>
 
 <!-- Klick-Logik -->
 <script>
   const btn = document.getElementById('donateBtn');
-
   btn.addEventListener('click', (e) => {
-    // Herz erzeugen
     const heart = document.createElement('div');
     heart.className = 'heart';
     heart.textContent = '💜';
@@ -295,57 +320,52 @@
     heart.style.left = (e.clientX - rect.left) + 'px';
     heart.style.top = (e.clientY - rect.top) + 'px';
     btn.appendChild(heart);
-
-    // Herz entfernen nach Animation
     setTimeout(() => heart.remove(), 1000);
-
-    // PayPal-Link öffnen
     window.open('https://paypal.me/surrealesymmetrie', '_blank');
   });
 </script>
-  
-</body>
-</html>
+
 <!-- Trennlinie -->
 <hr style="margin: 60px auto; width: 60%; border: 0; border-top: 1px solid #555;">
 
 <h2>[Hör]Buch-Hybriden</h2>
 
+<!-- Hybrid-Infotext -->
+<div class="hybrid-info">
+  <p>
+    30% lesen – 70% hören<br>
+    Eine völlig neue Art, in Geschichten einzutauchen.
+  </p>
+  <p>
+    <strong>ABER ACHTUNG: SPOILERGEFAHR!</strong><br>
+    Hier entsteht die 7‑teilige „Chaos im Blut“-Reihe.<br>
+    Die ersten beiden Bände können noch unabhängig gehört & gelesen werden,<br>
+    enthalten aber Eastereggs und wiederkehrende Figuren.
+  </p>
+  <p>
+    Empfohlene Reihenfolge:<br>
+    LOVEWAYS – auf Schnurrwegen (Prequel)<br>
+    PERSPEXION – im Spiegelscherbenglanz verschollen (Band 1)<br>
+    OBREDSION – im Gefundenwerden verloren (Band 2)
+  </p>
+  <p>
+    Am Ende bleibt die Entscheidung dir überlassen – aber ich verspreche dir, es lohnt sich.
+  </p>
+</div>
+
 <!-- Hybrid-Buch-Container -->
-<div class="cover-grid">
-    </a>
-   <p>
-      30% lesen - 70% hören
-      Eine völlig neue Art, in Geschichten einzutauchen.
-    <p>
-      ABER ACHTUNG: SPOILERGEFAHR!<br>
-      hier entsteht die 7-teilige "Chaos im Blut"-Reihe.<br>
-      Die ersten beiden Bände können noch komplett unabhängig gehört & gelesen werden,<br>
-      enthalten durch Eastereggs und Wiederkehrende Figuren aber einige Spoiler,<br>
-      die du vielleicht vermeiden möchtest.<br>
-      Deshalb empfehle ich, diese Reihenfolge einzuhalten:<br>
-      LOVEWAYS - auf Schnurrwegen (als Prequel)<br>
-      PERSPEXION - im Spiegelscherbenglanz verschollen (Chaos im Blut 1)<br>
-      OBREDSION - im Gefundenwerden verloren (Chaos im Blut 2)<br>
-    <p>
-      Am Ende bleibt diese Entscheidung dir überlassen!<br>
-      Ich kann es verstehen, wenn du nicht erst durch zwei andere Geschichten<br>
-      wandern möchtest, bevor dich der Weg zum bisherigen Highlight<br>
-      dieses Storyversums ankommst.<br>
-      Vor allem, weil sie schon recht unterschiedlich sind.<br>
-      Aber ich verspreche dir, dass es sich lohnt!<br>
-    </p>
-  </div>
+<div class="hybrid-grid">
+
   <!-- Hybrid 1 -->
   <div class="cover-card">
     <a href="https://www.amazon.de/dp/B0GND4XQSS" target="_blank">
       <img src="COVER_PERSPEXION.jpg" alt="PERSPEXION - im Spiegelscherbenglanz verschollen">
     </a>
     <p>
-      Band 1 der "Chaos im Blut"-Reihe<br>
-      Poetisch, aber düster und mit<br>
+      Band 1 der „Chaos im Blut“-Reihe<br>
+      Poetisch, düster, vielschichtig<br>
       Matrjoschka-Seelen-Konstrukt<br>
-      Entführung mal anders<br>
+      Entführung mal anders
     </p>
   </div>
 
@@ -355,23 +375,11 @@
       <img src="COVER_OBREDSION.jpg" alt="OBREDSION - im Gefundenwerden verloren">
     </a>
     <p>
-      Band 2 der "Chaos im Blut"-Reihe<br>
-      Ein psychologischer<br>
-      Dark Romantasy Thriller,<br>
-      der dich an die Grenzen<br>
-      deines Mitgefühls führt<br>
+      Band 2 der „Chaos im Blut“-Reihe<br>
+      Psychologischer Dark Romantasy Thriller<br>
+      Intensiv, emotional, verstörend<br>
+      An den Grenzen des Mitgefühls
     </p>
   </div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
